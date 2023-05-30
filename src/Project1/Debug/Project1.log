@@ -1,0 +1,3 @@
+﻿  ZVUK.cpp
+C:\Users\n.torkina\Downloads\jlibmodbus-master\FSO\src\Project1\ZVUK.cpp(1,10): fatal  error C1083: Не удается открыть файл включение: ZVUK.h: No such file or directory,
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(703,5): error MSB6006: "CL.exe" завершилась с кодом 2.

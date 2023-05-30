@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component inherit-compiler-output="true" jdk="temurin-17" jdk_type="JavaSDK">
+	<contentEntry url="file://$MODULE_DIR$/src"/>
+	<levels>
+		<level name="EasyModbusJava" value="project"/>
+		<level name="mysql-connector-java-8.0.20" value="project"/>
+		<level name="joda-time-2.12.2" value="project"/>
+		<level name="androidthings-1.0" value="project"/>
+		<level name="jssc-2.9.4" value="project"/>
+		<level name="Project1" value="project"/>
+		<level name="src" value="project"/>
+		<level name="lib1" value="project"/>
+		<level name="javafx-jmods-20.0" value="project"/>
+		<level name="poi" value="project"/>
+		<level name="poi-scratchpad-5.2.2" value="project"/>
+	</levels>
+</component>
