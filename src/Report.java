@@ -15,8 +15,9 @@ public class Report {
     static public String tempName ="protocolFSO.docx";
     static public String folderIn = "C:\\src\\";
     static public Path desktop = Paths.get(System.getenv("USERPROFILE") + "\\Desktop");
-    static public String folderOut = desktop.toString()+"\\reports\\";
+    static public String folderOut = desktop.toString()+"\\Отчеты\\";
     static public String lastName;
+    static public int fieldCount = 145;
 
 
     static boolean save(){
@@ -39,7 +40,7 @@ public class Report {
                 cell.setText(String.valueOf(j+1));
             }
             // MINIMUM AND MAXIMUM MEASURES
-            row = tbl.getRow(20);
+            row = tbl.getRow(31);
             cell = row.getCell(0);
             cell.setText(String.valueOf(Alg.minMeasure));
             cell = row.getCell(1);
@@ -83,17 +84,19 @@ public class Report {
 
     public  boolean add (int value) {
         boolean result = false;
-        try {
-            Alg.measures.add(value);
-            Main.mainFrame.windowMain.T3CellSet(Alg.measures.size() - 1, String.valueOf(Alg.measures.size()), String.valueOf(value));
-            Alg.minMeasure = Alg.countMinMeasure();
-            Alg.maxMeasure = Alg.countMaxMeasure();
-            Main.mainFrame.windowMain.minlbl.setText(String.valueOf(Alg.minMeasure));
-            Main.mainFrame.windowMain.maxlbl.setText(String.valueOf(Alg.maxMeasure));
-            result = true;
-        }
-        catch (Exception e) {
+        if (Alg.measures.size()<fieldCount) {
+            try {
+                Alg.measures.add(value);
+                Main.mainFrame.windowMain.T3CellSet(Alg.measures.size() - 1, String.valueOf(Alg.measures.size()), String.valueOf(value));
 
+                Alg.minMeasure = Alg.countMinMeasure();
+                Alg.maxMeasure = Alg.countMaxMeasure();
+                Main.mainFrame.windowMain.minlbl.setText(String.valueOf(Alg.minMeasure));
+                Main.mainFrame.windowMain.maxlbl.setText(String.valueOf(Alg.maxMeasure));
+                result = true;
+            } catch (Exception e) {
+
+            }
         }
         return result;
     }

@@ -82,7 +82,7 @@ public class SQL {
         Statement statement = null;
         try {
             statement = connection.createStatement();
-            ResultSet results = statement.executeQuery("SELECT NAME FROM PROG");
+            ResultSet results = statement.executeQuery("SELECT NAME FROM PROG3");
             ArrayList<String> buf = new ArrayList<>();
             while (results.next()) {
                 buf.add(results.getString(1));
@@ -100,7 +100,7 @@ public class SQL {
         Statement statement = null;
         try {
             statement = connection.createStatement();
-            ResultSet result = statement.executeQuery("SELECT * FROM PROG WHERE id = "+ id);
+            ResultSet result = statement.executeQuery("SELECT * FROM PROG3 WHERE id = "+ id);
             result.next();
             PROG.current = new PROG(result.getInt(1),
                                     result.getString(2),
@@ -113,7 +113,8 @@ public class SQL {
                                     result.getDouble(9),
                                     result.getDouble(10),
                                     result.getDouble(11),
-                                    result.getInt(12));
+                                    result.getInt(12),
+                                    result.getInt(13)); // clamp
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -156,7 +157,7 @@ public class SQL {
         try {
             statement = connection.createStatement();
             // update an existing record
-            String query = "UPDATE PROG SET " +
+            String query = "UPDATE PROG3 SET " +
                     "NAME = \"" + PROG.current.getName() + "\", " +
                     "LENGTH = " + PROG.current.getLength() + ", " +
                     "WIDTH = " + PROG.current.getWidth() + ", " +
@@ -167,8 +168,9 @@ public class SQL {
                     "POWER_MIN = " + PROG.current.getMinforce() + ", " +
                     "POWER_MAX = " + PROG.current.getMaxforce() + ", " +
                     "GIS = " + PROG.current.getGis() + ", " +
-                    "DIN = " + PROG.current.getDin() + " " +
-                    "WHERE PROG.ID = " + PROG.current.getId() + " ;";
+                    "DIN = " + PROG.current.getDin() + ", " +
+                    "CLAMP = " + PROG.current.getClamp() + " " +
+                    "WHERE PROG3.ID = " + PROG.current.getId() + " ;";
 
             int result = statement.executeUpdate(query);
             ret = (result == 1);
@@ -189,8 +191,8 @@ public class SQL {
         try {
             statement = connection.createStatement();
             // update an existing record
-            String query = "INSERT INTO PROG (id, name, length, width, height, mass, min_frq, max_frq, power_min, power_max, gis, din) VALUES ("+
-                    id + ", \"Новая программа\" , 0,0,0,0,0,0,0,0,0,1 )";
+            String query = "INSERT INTO PROG3 (id, name, length, width, height, mass, min_frq, max_frq, power_min, power_max, gis, din, clamp) VALUES ("+
+                    id + ", \"Новая программа\" , 0,0,0,0,0,0,0,0,0,1,1 )"; // clamp
             int result = statement.executeUpdate(query);
             ret = true;
         } catch (SQLException e) {
@@ -208,7 +210,7 @@ public class SQL {
         try {
             statement = connection.createStatement();
 
-                String query = "UPDATE PROG SET id = id - 1 WHERE id > "+ delInd;
+                String query = "UPDATE PROG3 SET id = id - 1 WHERE id > "+ delInd;
                 int result = statement.executeUpdate(query);
 
 
@@ -223,7 +225,7 @@ public class SQL {
         Statement statement = null;
         try {
             statement = connection.createStatement();
-            String query = "DELETE FROM PROG WHERE ID = " + ind;
+            String query = "DELETE FROM PROG3 WHERE ID = " + ind;
             int result = statement.executeUpdate(query);
 
         } catch (SQLException e) {

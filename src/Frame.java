@@ -8,7 +8,7 @@ public Service serviceWindow;
         serviceWindow = new Service();
         this.setContentPane(serviceWindow.panel1);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(1290,500);
+        this.setSize(1290,450);
         //this.setExtendedState(MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
         this.setTitle("Техническое обслуживание стенда");

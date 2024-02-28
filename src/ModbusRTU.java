@@ -129,6 +129,8 @@ public class ModbusRTU extends Thread{
         Alg.oilTempCont = (PLCin.get("bits1")>>3&1) == 1;
         Alg.stationIsOn = (PLCin.get("bits1")>>4&1) == 1;
         Alg.PresHHErr = (PLCin.get("bits1")>>5&1) == 1;
+        Alg.FilterErr = (PLCin.get("bits1")>>6&1) == 1;
+        Alg.TempOilErr = (PLCin.get("bits1")>>7&1) == 1;
         Alg.stage = PLCin.get("stage");
     }
 }

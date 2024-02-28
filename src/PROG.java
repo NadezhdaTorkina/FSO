@@ -13,6 +13,18 @@ public class PROG {
         programs[4] = "prog5";
     }
 
+    public static boolean checkMeasure(int lastMeasure) {
+        if (PROG.current != null) {
+            if (lastMeasure > PROG.current.maxFrq | lastMeasure < PROG.current.minFrq) {
+                return true;
+            } else return false;
+        }
+        else {
+               return false;
+        }
+
+    }
+
 
     public int getId() {
         return id;
@@ -110,6 +122,14 @@ public class PROG {
         this.din = din;
     }
 
+    public int getClamp() {
+        return clamp;
+    }
+
+    public void setClamp(int clamp) {
+        this.clamp = clamp;
+    }
+
     // data structure read from data base about a program
     private int id;
     private String name;
@@ -123,8 +143,12 @@ public class PROG {
     private double maxforce;
     private double gis;
     private int din; // 1 - low scale 2 - high scale
+    private int clamp;
 
-    public PROG(int id, String name, double length, double width, double height, double mass, double minFrq, double maxFrq, double minforce, double maxforce, double gis, int din) {
+
+
+
+    public PROG(int id, String name, double length, double width, double height, double mass, double minFrq, double maxFrq, double minforce, double maxforce, double gis, int din, int clamp) {
         this.id = id;
         this.name = name;
         this.length = length;
@@ -137,6 +161,7 @@ public class PROG {
         this.maxforce = maxforce;
         this.gis = gis;
         this.din = din;
+        this.clamp = clamp;
     }
 
     public PROG (int id, String name) {
@@ -152,6 +177,7 @@ public class PROG {
         this.maxforce = 0;
         this.gis = 0;
         this.din = 0;
+        this.clamp = 1;
     }
 
     static List<PROG> allProgs;

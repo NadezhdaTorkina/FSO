@@ -22,7 +22,7 @@ public class Main {
     static ZVUKThread zvukThread;
     static boolean serviceIsDone;
     public static void main(String[] args) {
-        Frame frame = new Frame();
+      /*  Frame frame = new Frame();
         while (!serviceIsDone) {
             try {
                 Thread.sleep(100);
@@ -31,16 +31,16 @@ public class Main {
             }
         }
         frame.dispose();
-        //Toolkit.getDefaultToolkit().beep();
+        //Toolkit.getDefaultToolkit().beep();*/
 
         modbusRTU = new ModbusRTU(5);
-        modbusRTU.start();
+        //modbusRTU.start();
 
         //din1 = new RTU(Din1_adr, "COM25"); // адрес 2 для малого диапозона
         //din1.start();
 
         din2 = new RTU(Din2_adr, "COM25"); // адрес 6 на стенде на наладке, большой диапозон
-        din2.start();
+        //din2.start();
 
 
 
@@ -66,15 +66,15 @@ public class Main {
         //System.out.println(Arrays.toString(res));
 
         zvukThread = new ZVUKThread();
-        zvukThread.start();
+        //zvukThread.start();
 
         repo = new Report();
 
         alg = new Alg();
         alg.start();
 
-        //repo.add(666);
 
+       // repo.add(2342);
 
         while (true){
 
@@ -123,6 +123,13 @@ public class Main {
         } catch (Exception e) {
 
         }
+
+        mainFrame.windowMain.table2.getModel().setValueAt(Alg.extraClamp?"кгс/см2":"кгс",6,1);
+        mainFrame.windowMain.table2.getModel().setValueAt(Alg.extraClamp?"кгс/см2":"кгс",7,1);
+        mainFrame.windowMain.table2.getModel().setValueAt(Alg.extraClamp?"кгс/см2":"кгс",8,1);
+
+        mainFrame.windowMain.CLAMP.setVisible(Alg.extraClamp);
+
         mainFrame.windowMain.COLORLbl.setBackground(Alg.colorStage(Alg.stage));
         mainFrame.windowMain.STAGElbl.setText(Alg.printStage(Alg.stage));
 
@@ -151,6 +158,8 @@ public class Main {
         mainFrame.windowMain.hRegOff.setEnabled(Alg.Hand);
         mainFrame.windowMain.frqHandOnBtn.setEnabled(Alg.Hand);
         mainFrame.windowMain.FrqHandOffBtn.setEnabled(Alg.Hand);
+        mainFrame.windowMain.YA4OnBtn.setEnabled(Alg.Hand);
+        mainFrame.windowMain.YA4OffBtn.setEnabled(Alg.Hand);
 
         mainFrame.windowMain.hRegTextDecBtn.setEnabled(Alg.HandRegCmd);
         mainFrame.windowMain.hRegTextIncBtn.setEnabled(Alg.HandRegCmd);
@@ -169,6 +178,8 @@ public class Main {
         mainFrame.windowMain.hReglbl.setText("УСТАНОВЛЕНО");}
         mainFrame.windowMain.PLCLbl.setBackground(modbusRTU.connectPLC ? DARK_GREEN : Color.red);
         mainFrame.windowMain.err1Pnl.setVisible(Alg.PresHHErr);
+        mainFrame.windowMain.err2Pnl.setVisible(Alg.FilterErr);
+        mainFrame.windowMain.err3Pnl.setVisible(Alg.TempOilErr);
         if (!modbusRTU.connectPLC) {
 
             mainFrame.windowMain.OUT0LBL.setText("***");
@@ -178,6 +189,7 @@ public class Main {
             mainFrame.windowMain.DO0LBL.setText("***");
             mainFrame.windowMain.preslbl.setText("***");
             mainFrame.windowMain.pumpIsOnLbl.setText("***");
+            mainFrame.windowMain.YA4Lbl.setText("***");
 
             mainFrame.windowMain.OUT0LBL.setForeground(Color.GRAY);
             mainFrame.windowMain.OUT1LBL.setForeground(Color.GRAY);
@@ -186,6 +198,7 @@ public class Main {
             mainFrame.windowMain.DO0LBL.setForeground(Color.GRAY);
             mainFrame.windowMain.preslbl.setForeground(Color.GRAY);
             mainFrame.windowMain.pumpIsOnLbl.setForeground(Color.GRAY);
+            mainFrame.windowMain.YA4Lbl.setForeground(Color.GRAY);
         }
         else {
             mainFrame.windowMain.OUT0LBL.setText(Alg.do100_01?"ВКЛЮЧЕН":"ВЫКЛЮЧЕН");
@@ -194,7 +207,7 @@ public class Main {
             mainFrame.windowMain.OUT3LBL.setText(Alg.do100_04?"ВКЛЮЧЕН":"ВЫКЛЮЧЕН");
             mainFrame.windowMain.DO0LBL.setText(Alg.do100_00?"РАЗРЕШЕНО":"ЗАПРЕЩЕНО");
             mainFrame.windowMain.pumpIsOnLbl.setText(Alg.stationIsOn?"ВКЛЮЧЕНА":"ВЫКЛЮЧЕНА");
-
+            mainFrame.windowMain.YA4Lbl.setText(Alg.do100_05?"ВКЛЮЧЕН":"ВЫКЛЮЧЕН");
             //mainFrame.windowMain.zvukLbl.setBackground(ZVUK.connected ? DARK_GREEN : Color.red);
 
 
@@ -204,6 +217,7 @@ public class Main {
             mainFrame.windowMain.OUT3LBL.setForeground(Alg.do100_04?DARK_GREEN:Color.BLACK);
             mainFrame.windowMain.DO0LBL.setForeground(Alg.do100_00?DARK_GREEN:Color.BLACK);
             mainFrame.windowMain.pumpIsOnLbl.setForeground(Alg.stationIsOn?DARK_GREEN:Color.BLACK);
+            mainFrame.windowMain.YA4Lbl.setForeground(Alg.do100_05?DARK_GREEN:Color.BLACK);
 
 
 

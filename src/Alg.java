@@ -4,6 +4,8 @@ import java.util.ArrayList;
 public class Alg extends Thread{
 
     public static boolean PresHHErr;
+    public static boolean FilterErr;
+    public static boolean TempOilErr;
     static int control;
     static int autoSet;
     static boolean Hand; //2
@@ -19,6 +21,8 @@ public class Alg extends Thread{
     // 11 - ошибка связи с динамометром
     static boolean errReset;    //12
     static boolean FSOsuccess; // 13
+    static boolean extraClamp; // 14  CLAMP from old facility
+    static boolean HandClampValve; // 15 clamp hand on cmd
 
     static final String S0 = " ";  // выключен вообще режим АВТО
     static final String S1 = " НАЖМИТЕ ПЕДАЛЬ ";
@@ -84,6 +88,7 @@ public class Alg extends Thread{
     static boolean do100_02; // клапан сливной
     static boolean do100_03; // гидрораспределитель подачи
     static boolean do100_04; // включить клапан обратной подачи ( разгрузка )
+    static boolean do100_05; // включить клапан на доп зажим CLAMP
     static double DD1 = 0d;  // давление в гидростанции, от ПЛК
     static boolean DD1Error = false;  // ошибка преобразования данных
     static boolean PresIsSet = false;  // давление вышло на уставку
@@ -120,7 +125,7 @@ public class Alg extends Thread{
                 RegHandSet = 0.0d;
                 HandFrqCmd = false;
                 FrqHandSet = 50.0d;
-
+                HandClampValve = false;
             }
             if (!Auto) {
                 AutoStartCmd = false;
@@ -129,7 +134,7 @@ public class Alg extends Thread{
             synchronized (this){
                 control = (Auto ? 2 : 0) + (Hand ? 4 : 0) + (AutoStartCmd ? 8 : 0) + (HandLoPumpSpeed ? 16 : 0) + (HandDrainValve ? 32 : 0) +
                         (HandFeedValve ? 64 : 0) + (HandReturnValve ? 128 : 0) + (propHandCmd ? 256 : 0) + (HandRegCmd ? 512 : 0) + (HandFrqCmd ? 1024 : 0) +
-                        (Main.din2.commErr ? 2048 : 0) + (errReset ? 4096 : 0) + (FSOsuccess? 8192:0);
+                        (Main.din2.commErr ? 2048 : 0) + (errReset ? 4096 : 0) + (FSOsuccess? 8192:0) + (extraClamp? 16384:0) + (HandClampValve? 32768:0);   // CLAMP!!!!
 
                 if (errReset) {
                     errReset = false;
@@ -148,6 +153,7 @@ public class Alg extends Thread{
             if (FSOsuccess) {
                 if (!FsoIsWritten) {
                     Main.repo.add(Alg.lastMeasure);
+
                     FsoIsWritten = true;
                 }
                 teststart = false;
@@ -156,6 +162,18 @@ public class Alg extends Thread{
             if (!PresIsSet ){   // | !teststart) {
                 FsoIsWritten = false;
                 FSOsuccess = false;
+            }
+            // CLAMP
+            if (PROG.current != null) {
+                if (PROG.current.getClamp() == 2) {
+                    extraClamp = true;
+                }
+                else {
+                    extraClamp = false;
+                }
+            }
+            else {
+                extraClamp = false;
             }
 
 

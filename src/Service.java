@@ -15,16 +15,16 @@ public class Service {
     private JCheckBox checkBox1;
     private JButton Done2Button;
     private JButton Done3Button;
-    private JButton Done4Button;
+   // private JButton Done4Button;
     private JButton Done8Button;
     private JLabel LastDateLbl1;
     private JLabel LastDateLbl2;
     private JLabel LastDateLbl3;
-    private JLabel LastDateLbl4;
+   // private JLabel LastDateLbl4;
     private JLabel LastDateLbl8;
     private JCheckBox checkBox2;
     private JCheckBox checkBox3;
-    private JCheckBox checkBox4;
+   // private JCheckBox checkBox4;
     private JCheckBox checkBox8;
     private JLabel LastDateLbl7;
     private JLabel LastDateLbl6;
@@ -48,6 +48,8 @@ public class Service {
         UIManager.put("OptionPane.cancelButtonText", "Отмена");
         UIManager.put("OptionPane.okButtonText"    , "Готово");
 
+        ConfirmButton.requestFocusInWindow();
+
         Done1Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -68,7 +70,7 @@ public class Service {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (checkBox1.isSelected() & checkBox2.isSelected() &
-                        checkBox3.isSelected() & checkBox4.isSelected() &
+                        checkBox3.isSelected() & //checkBox4.isSelected() &
                         checkBox5.isSelected() & checkBox6 .isSelected() &
                          checkBox7.isSelected() & checkBox8.isSelected()) {
                     // закрыть окно, открыть другое, рабочее
@@ -112,7 +114,7 @@ public class Service {
                 }
             }
         });
-        Done4Button.addActionListener(new ActionListener() {
+        /*Done4Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int b = JOptionPane.showConfirmDialog(null,"Работы успешно завершены?","Подтверждение",
@@ -127,7 +129,7 @@ public class Service {
                     }
                 }
             }
-        });
+        });*/
         Done8Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -199,7 +201,7 @@ public class Service {
         Date date1 = SQL.getLastDate(1);
         Date date2 = SQL.getLastDate(2);
         Date date3 = SQL.getLastDate(3);
-        Date date4 = SQL.getLastDate(4);
+        //Date date4 = SQL.getLastDate(4);
         Date date5 = SQL.getLastDate(5);
         Date date6 = SQL.getLastDate(6);
         Date date7 = SQL.getLastDate(7);
@@ -208,7 +210,7 @@ public class Service {
         LastDateLbl1.setText(df.format(date1));
         LastDateLbl2.setText(df.format(date2));
         LastDateLbl3.setText(df.format(date3));
-        LastDateLbl4.setText(df.format(date4));
+        //LastDateLbl4.setText(df.format(date4));
         LastDateLbl5.setText(df.format(date5));
         LastDateLbl6.setText(df.format(date6));
         LastDateLbl7.setText(df.format(date7));
@@ -228,9 +230,9 @@ public class Service {
         days = d.getDays();
         if (days < 1) checkBox3.setSelected(true);
 
-        d = Days.daysBetween(Instant.parse(date4.toString()),Instant.now());
-        days = d.getDays();
-        if (days < 1) checkBox4.setSelected(true);
+        //d = Days.daysBetween(Instant.parse(date4.toString()),Instant.now());
+        //days = d.getDays();
+        //if (days < 1) checkBox4.setSelected(true);
 
         d = Days.daysBetween(Instant.parse(date5.toString()),Instant.now());
         days = d.getDays();

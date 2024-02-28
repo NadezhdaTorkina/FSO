@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -82,7 +83,6 @@ public class WindowMain {
     JLabel dinTypeLbl;
     JLabel dinIsConnLbl;
     JLabel pumpIsOnLbl;
-    private JLabel pumpHandSetLbl;
     JButton frqHandOnBtn;
     JButton FrqHandOffBtn;
     private JTextField frqHandSetText;
@@ -100,9 +100,17 @@ public class WindowMain {
     JLabel err1Lbl;
     private JLabel err1lbl2;
     JPanel err1Pnl;
+    private JLabel err2lbl;
+    JPanel err2Pnl;
+    JPanel err3Pnl;
+    public JLabel CLAMP;
+    JLabel YA4Lbl;
+    JButton YA4OnBtn;
+    JButton YA4OffBtn;
+    private JButton add;
     JLabel edit;
     public static int T3columnsNumb = 10;
-    public static int T3rowsNumb = 18;
+    public static int T3rowsNumb = 29;
 
     public WindowMain() {
 
@@ -226,55 +234,60 @@ public class WindowMain {
         редактироватьButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 if (!PROG.editCurrProg & !currProgName.getText().equals("выберите...")) {
-                    textField1.setVisible(true);
-                    textField1.setText(currProgName.getText());
-                    currProgName.setVisible(false);
-                    PROG.editCurrProg = true;
-                    редактироватьButton.setText("Сохранить");
-                    table2.setRowSelectionAllowed(false);
-                    table2.getColumnModel().getColumn(2).setCellRenderer(new DefaultTableCellRenderer() {
-                        @Override
-                        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                            Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                            cell.setBackground(new Color(5,235,5));
-                            return cell;
-                        }
-                    });
-                    table2.repaint();
-                }
-                else {
+                    if (getPswd()) {
+                        textField1.setVisible(true);
+                        textField1.setText(currProgName.getText());
+                        currProgName.setVisible(false);
+                        PROG.editCurrProg = true;
+                        редактироватьButton.setText("Сохранить");
+                        table2.setRowSelectionAllowed(false);
+                        table2.getColumnModel().getColumn(2).setCellRenderer(new DefaultTableCellRenderer() {
+                            @Override
+                            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                                Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                                cell.setBackground(new Color(5, 235, 5));
+                                return cell;
+                            }
+                        });
+                        table2.repaint();
+                    }
+                } else {
                     PROG temp = saveProg(table2, PROG.current.getId(), textField1.getText());
                     if (temp == null) {
                         JOptionPane.showMessageDialog(null, "Некорректные данные", "Сохранение программы", 0);
                     } else {
-                        if (!table2.isEditing()) {
-                            PROG.current = temp;
-                            PROG.AutoSet();
-                            if (SQL.saveProg()) {
-                                PROG.editCurrProg = false;
 
-                                table1.getModel().setValueAt(PROG.current.getName(), PROG.current.getId() - 1, 1);
-                                PROG.programs[PROG.current.getId() - 1] = PROG.current.getName();
-                                selectedLbl.setText("Выберите программу...");
-                                textField1.setVisible(false);
-                                currProgName.setText(textField1.getText());
-                                currProgName.setVisible(true);
-                                редактироватьButton.setText("Редактировать");
-                                table2.getColumnModel().getColumn(2).setCellRenderer(new DefaultTableCellRenderer() {
-                                    @Override
-                                    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                                        Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                                        cell.setBackground(Color.white);
-                                        return cell;
-                                    }
-                                });
-                                table2.repaint();
-                            }
+                            if (!table2.isEditing()) {
+                                PROG.current = temp;
+                                PROG.AutoSet();
+                                if (SQL.saveProg()) {
+                                    PROG.editCurrProg = false;
+
+                                    table1.getModel().setValueAt(PROG.current.getName(), PROG.current.getId() - 1, 1);
+                                    PROG.programs[PROG.current.getId() - 1] = PROG.current.getName();
+                                    selectedLbl.setText("Выберите программу...");
+                                    textField1.setVisible(false);
+                                    currProgName.setText(textField1.getText());
+                                    currProgName.setVisible(true);
+                                    редактироватьButton.setText("Редактировать");
+                                    table2.getColumnModel().getColumn(2).setCellRenderer(new DefaultTableCellRenderer() {
+                                        @Override
+                                        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                                            Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                                            cell.setBackground(Color.white);
+                                            return cell;
+                                        }
+                                    });
+                                    table2.repaint();
+                                }
+
+                        }
                     }
-                }
-                }
+                }  /////
             }
+
         });
 
         применитьButton.addActionListener(new ActionListener() {
@@ -327,7 +340,8 @@ public class WindowMain {
         addProgBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!PROG.editCurrProg){
+                if (!PROG.editCurrProg) {
+                    if (getPswd()) {
                     if (SQL.addNewProg()) {
                         renewTable1();
                         Alg.id = PROG.programs.length;
@@ -340,12 +354,13 @@ public class WindowMain {
                         resizeflag = true;
                     }
                 }
+                }
             }
         });
         DeleteProgBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if (getPswd()) {
                 if (!PROG.editCurrProg) {
                     // если строчка не является активной
                     int delInd = table1.getSelectedRow();
@@ -357,7 +372,7 @@ public class WindowMain {
                         selectedLbl.setText("Выберите программу...");
                         Alg.id = -1;
 
-                        if ( delInd == PROG.current.getId() ) {
+                        if (delInd == PROG.current.getId()) {
                             PROG.current = null;
                             renewTable2();
                             PROG.ZeroAutoSet();
@@ -368,7 +383,7 @@ public class WindowMain {
                     // если выбранная строчка активная - удалить все из таблицы 2, из лейбла над ней.
                     // перерисовать таблицу
                 }
-
+            }
             }
         });
 
@@ -620,6 +635,30 @@ public class WindowMain {
                 Main.repo.cancel();
             }
         });
+
+
+        YA4OnBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Alg.HandClampValve = true;
+            }
+        });
+        YA4OffBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Alg.HandClampValve = false;
+            }
+        });
+    }
+
+    private boolean getPswd(){
+        String pwd = JOptionPane.showInputDialog(null,"","Введите пароль",3);
+        if (pwd.strip().equals("080888")) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     private void setNewRegHandSet() {
@@ -676,10 +715,15 @@ public class WindowMain {
 
     public void T3CellSet(int i, String s1,String s2) {
         // cell number starts at 0
-        int col = i/T3rowsNumb;
-        int row = i - col*T3rowsNumb;
-        table3.setValueAt(s1,row,col*2);
-        table3.setValueAt(s2,row,col*2+1);
+        try {
+            int col = i / T3rowsNumb;
+            int row = i - col * T3rowsNumb;
+            table3.setValueAt(s1, row, col * 2);
+            table3.setValueAt(s2, row, col * 2 + 1);
+
+            table3.repaint();
+        }
+        catch (ArrayIndexOutOfBoundsException e ) {}
     }
 
     private void changeCurrId() {
@@ -783,7 +827,23 @@ public class WindowMain {
             else {
                 mistake = true;
             }
-
+            // get CLAMP numb from table2 (prog parameters)
+            ob = t.getModel().getValueAt(10,2);
+            d=0;
+            if (ob instanceof Integer) {
+                d = (int) ob;
+            }
+            if (ob instanceof String) {
+                buf = (String)ob;
+                buf  = buf.strip().replaceAll(",",".");
+                d = Integer.parseInt(buf);
+            }
+            if (d == 1 | d == 2) {
+                temp.setClamp(d);
+            }
+            else {
+                mistake = true;
+            }
 
         }
         catch (Exception e) {
@@ -797,7 +857,7 @@ public class WindowMain {
 
     private void renewTable2() {
         if ( PROG.current == null ) {
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 11; i++) {
                 table2.getModel().setValueAt("", i, 2);
             }
         }
@@ -821,6 +881,7 @@ public class WindowMain {
                 table2.getModel().setValueAt("", 8, 2);
             }
             table2.getModel().setValueAt(PROG.current.getDin(), 9, 2);
+            table2.getModel().setValueAt(PROG.current.getClamp(), 10, 2);
         }
     }
 
@@ -879,6 +940,7 @@ public class WindowMain {
         model2.addRow(new String[]{"Усилие зажатия лопатки максимальное","кгс"});
         model2.addRow(new String[]{"Допуск усилия зажатия лопатки","кгс"});
         model2.addRow(new String[]{"Выбор динамометра *",""});
+        model2.addRow(new String[]{"Выбор гидрозажима **",""});
 
         // the table for measures
         DefaultTableModel model3 = new DefaultTableModel(T3rowsNumb,T3columnsNumb){
@@ -889,10 +951,32 @@ public class WindowMain {
         };
 
         model3.setColumnIdentifiers(new String[]{"№ лопатки","ЧСК","№ лопатки","ЧСК","№ лопатки","ЧСК","№ лопатки","ЧСК","№ лопатки","ЧСК"});
-        table3 = new JTable(model3);
 
 
-
+        table3 = new JTable(model3) {
+            @Override
+            public TableCellRenderer getCellRenderer(int row, int column) {
+               DefaultTableCellRenderer tcr = (DefaultTableCellRenderer) super.getCellRenderer(row, column);
+               try {
+                   if (column%2==1) {
+                       int b = Alg.measures.get(column/2*T3rowsNumb + row);
+                       if (PROG.checkMeasure(b)) {
+                      // if (column > 5 & row > 5 | column == 2 & row == 2) {
+                           tcr.setBackground(Color.orange);
+                       } else {
+                           tcr.setBackground(Color.white);
+                       }
+                   }
+                   else {
+                       tcr.setBackground(Color.white);
+                   }
+               }
+               catch (Exception e) {
+                   tcr.setBackground(Color.white);
+               }
+                return tcr;
+            }
+        };
 
 
     }
